@@ -1,0 +1,32 @@
+{
+  "type": "mesh-derived anisotropic Gaussian splats",
+  "photo_trained": false,
+  "count": 594640,
+  "previous_count": 297320,
+  "density_multiplier": 2,
+  "units": "metres",
+  "up_axis": "Y",
+  "source": "corrected room model",
+  "fields": [
+    "x",
+    "y",
+    "z",
+    "nx",
+    "ny",
+    "nz",
+    "f_dc_0",
+    "f_dc_1",
+    "f_dc_2",
+    "opacity",
+    "scale_0",
+    "scale_1",
+    "scale_2",
+    "rot_0",
+    "rot_1",
+    "rot_2",
+    "rot_3"
+  ],
+  "covariance": "surface tangent isotropic, normal axis thin",
+  "color": "baked model material and directional shading",
+  "opacity": 0.88
+}

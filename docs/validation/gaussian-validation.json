@@ -1,0 +1,10 @@
+{
+  "previous_count": 297320,
+  "new_count": 594640,
+  "ratio": 2.0,
+  "all_components_doubled": true,
+  "new_samples_not_duplicated": true,
+  "ply_layout_valid": true,
+  "quaternions_normalized": true,
+  "viewer_runtime": "Mock WebGL logic checks; real browser rendering unverified"
+}

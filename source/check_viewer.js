@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const html=fs.readFileSync('outputs/room-viewer.html','utf8'),code=html.match(/<script>([\s\S]*)<\/script>/)[1];
+const gl=new Proxy({getShaderParameter:()=>true,getProgramParameter:()=>true},{get:(o,k)=>o[k]??(()=>({}))});
+const elements={};const doc={getElementById:id=>elements[id]??=(id==='view'?{getContext:()=>gl,setPointerCapture:()=>{}}:{textContent:''})};
+const sandbox={document:doc,window:{},devicePixelRatio:1,innerWidth:1400,innerHeight:1000,console};vm.createContext(sandbox);vm.runInContext(code,sandbox);
+assert(sandbox.window.modelReady);
+const results=vm.runInContext(`(()=>{const checks=[];for(let a=0;a<8;a++){const angle=a*Math.PI/4,back=[Math.sin(angle)*.7,.714,Math.cos(angle)*.7];const hidden=hiddenWalls(back),total=scene.filter(o=>o.bounds).length;if([...hidden].some(name=>!scene.find(o=>o.name===name).autoCutaway))throw Error('Interior wall was hidden');checks.push({angle:a*45,hidden:hidden.size,retained:total-hidden.size});}wallMode=1;if(hiddenWalls([.7,.7,0]).size!==0)throw Error('Complete walls failed');wallMode=2;if(hiddenWalls([.7,.7,0]).size!==scene.filter(o=>o.autoCutaway).length)throw Error('Hide walls failed');wallMode=0;return checks;})()`,sandbox);
+elements.entry.onclick();elements.top.onclick();elements.home.onclick();elements.reverse.onclick();
+for(let i=0;i<3;i++)elements.walls.onclick({target:elements.walls});
+const scene=JSON.parse(fs.readFileSync('work/scene.json'));
+for(const name of ['Kitchen bathroom shared thin wall','Bathroom doorway lintel','Recess back wall','Apartment entrance door','Bathtub base','Toilet bowl','Bathroom basin'])assert(scene.some(o=>o.name===name));
+assert(!scene.some(o=>o.name==='Entry door'));
+console.log(JSON.stringify({viewerLogic:'PASS',wallAngles:results,sceneObjects:scene.length},null,2));

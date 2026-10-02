@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const html=fs.readFileSync('outputs/gaussian-viewer.html','utf8'),code=html.match(/<script>([\s\S]*)<\/script>/)[1];
+let drawCount=0;
+const gl=new Proxy({getShaderParameter:()=>true,getProgramParameter:()=>true,getParameter:()=>[1,1024],drawArrays:(_t,_s,c)=>{drawCount=c}},{get:(o,k)=>o[k]??(()=>({}))});
+const els={};let queued;
+const sandbox={document:{getElementById:id=>els[id]??=(id==='view'?{getContext:()=>gl,setPointerCapture:()=>{}}:{})},window:{},devicePixelRatio:1,innerWidth:1400,innerHeight:1000,atob:s=>Buffer.from(s,'base64').toString('binary'),requestAnimationFrame:f=>{queued=f},console};
+vm.createContext(sandbox);vm.runInContext(code,sandbox);queued();assert(drawCount>0);assert(sandbox.window.modelReady);
+const validation=vm.runInContext(`(()=>{let interiorHidden=0;for(let i=0;i<16;i++){const a=i*Math.PI/8,b=[Math.sin(a)*.7,.714,Math.cos(a)*.7];const h=hiddenFor(b);for(let j=0;j<h.length;j++){if(h[j]&&!groups[j].autoCutaway&&!groups[j].wallOwner)interiorHidden++;}}if(interiorHidden)throw Error('Interior walls hidden');return {count:N,fields:data.length,interiorHidden};})()`,sandbox);
+els.bath.onclick();queued();els.home.onclick();queued();els.walls.onclick({target:els.walls});queued();els.size.oninput({target:{value:'0.75'}});queued();
+console.log(JSON.stringify({...validation,visibleDrawCount:drawCount,logic:'PASS',shaderCompilation:'NOT VERIFIED: mock WebGL context'},null,2));
