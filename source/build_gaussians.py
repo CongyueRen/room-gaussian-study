@@ -2,7 +2,22 @@ import json, math, pathlib, base64
 import numpy as np
 
 root=pathlib.Path('outputs');scene=json.loads(pathlib.Path('work/scene.json').read_text());rng=np.random.default_rng(42)
-rows=[];groups=[];ply=[];spacing=.043;density_multiplier=2
+rows=[];groups=[];ply=[];spacing=.043;density_multiplier=3000000/297320
+target_count=3000000
+# Allocate an exact point budget after the pillow geometry changes.
+budgets=[]
+for ob in scene:
+ if ob['group'] in ['ceiling','glass']:continue
+ v=np.array(ob['v']).reshape(-1,3)
+ for idx in np.array(ob['i']).reshape(-1,3):
+  a,b,c=v[idx];area=np.linalg.norm(np.cross(b-a,c-a))/2
+  if area>=1e-9:budgets.append(max(1,int(math.ceil(area/spacing**2))))
+weights=np.array(budgets,dtype=float)
+ideal=weights/weights.sum()*(target_count-len(weights))
+budgets=np.floor(ideal).astype(int)+1
+remaining=target_count-int(budgets.sum())
+budgets[np.argsort(-(ideal-np.floor(ideal)),kind='stable')[:remaining]]+=1
+budget_index=0
 for oid,ob in enumerate(scene):
  groups.append({k:ob[k] for k in ['name','group','bounds','autoCutaway','wallOwner'] if k in ob})
  if ob['group'] in ['ceiling','glass']:continue
@@ -10,7 +25,7 @@ for oid,ob in enumerate(scene):
  for idx in np.array(ob['i']).reshape(-1,3):
   a,b,c=v[idx];area=np.linalg.norm(np.cross(b-a,c-a))/2
   if area<1e-9:continue
-  count=density_multiplier*max(1,int(math.ceil(area/spacing**2)))
+  count=int(budgets[budget_index]);budget_index+=1
   r=np.column_stack([(np.arange(count)+.5)/count,(np.arange(count)*.61803398875+rng.random())%1]);rt=np.sqrt(r[:,0]);weights=np.stack([1-rt,rt*(1-r[:,1]),rt*r[:,1]],axis=1)
   p=weights@v[idx];n=weights@norm[idx];n/=np.maximum(np.linalg.norm(n,axis=1,keepdims=True),1e-9)
   light=np.array([-.424,.707,.566]);col=np.array(ob['c'])[None,:]*(.65+.35*np.maximum(0,n@light))[:,None]
@@ -29,6 +44,7 @@ template=pathlib.Path(__file__).with_name('gaussian-viewer.html').read_text()
 template=template.replace('__DATA__',base64.b64encode(arr.tobytes()).decode()).replace('__GROUPS__',json.dumps(groups)).replace('__COUNT__',f'{N:,}')
 (root/'gaussian-viewer.html').write_text(template)
 np.save('work/gaussians.npy',arr)
-(root/'gaussian-manifest.json').write_text(json.dumps({'type':'mesh-derived anisotropic Gaussian splats','photo_trained':False,'count':N,'previous_count':297320,'density_multiplier':density_multiplier,'units':'metres','up_axis':'Y','source':'corrected room model','fields':props,'covariance':'surface tangent isotropic, normal axis thin','color':'baked model material and directional shading','opacity':.88},indent=2))
+(root/'gaussian-manifest.json').write_text(json.dumps({'type':'mesh-derived anisotropic Gaussian splats','photo_trained':False,'count':N,'previous_count':1189280,'density_multiplier':target_count/1189280,'original_count':297320,'target_count':target_count,'sampling':'exact budget, fresh samples, geometry-aware distribution','bedding':'muted curtain-matched blue (8faebb) with two rounded rectangular pillows','units':'metres','up_axis':'Y','source':'corrected room model','fields':props,'covariance':'surface tangent isotropic, normal axis thin','color':'baked model material and directional shading','opacity':.88},indent=2))
+assert N==target_count
 assert np.isfinite(out).all() and np.max(np.abs(np.linalg.norm(q,axis=1)-1))<1e-5
 print('Generated',N,'Gaussian splats; PLY size',len(header)+out.nbytes)

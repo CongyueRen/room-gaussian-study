@@ -7,6 +7,8 @@ im=np.full((H,W,3),[232,232,224],dtype=np.uint8);depth=np.full((H,W),-1e8)
 yaw=-.82;pitch=.85
 entry='entry' in sys.argv
 if entry:yaw=-.95;pitch=1.37
+if 'top' in sys.argv:yaw=0;pitch=1.56
+if 'reverse' in sys.argv:yaw+=math.pi
 cy,sy,cp,sp=math.cos(yaw),math.sin(yaw),math.cos(pitch),math.sin(pitch)
 b=np.array([sy*cp,sp,cy*cp]);m=np.array([[cy,0,-sy],[-sy*sp,cp,-cy*sp],b]);target=np.array([1.55,.65,3.05] if not entry else [1.65,.70,6.0]);light=np.array([-.424,.707,.566])
 targets=[[x,.65,z] for x in [.35,1.25,2.1,2.85] for z in [.6,1.4,2.4,3.5,4.2]]+[[.55,.65,z] for z in [4.8,5.65,6.35,7.12]]+[[x,.75,z] for x in [1.85,2.5,2.95] for z in [5.95,6.45,6.75]]+[[2.4,1.05,4.8],[1.17,.65,7.18],[2.84,.65,7.12]]
@@ -45,6 +47,6 @@ def preview_font(size):
   try:return ImageFont.truetype(name,size)
   except OSError:pass
  return ImageFont.load_default(size=size)
-for txt,xy,size in [('PHOTO → SPACE / 04',(55,48),15),('Bathroom and Recessed Wardrobe' if entry else 'Room Reconstruction · Revised Bathroom',(55,87),32),('Based on 10 photos and layout corrections · Exterior-wall cutaway only',(55,136),16),('Estimated dimensions  |  Interior partitions remain visible at every angle',(55,1030),15)]:d.text(xy,txt,font=preview_font(size),fill='#304741')
-out.save('outputs/bathroom-preview.png' if entry else 'outputs/room-preview.png')
+for txt,xy,size in [('PHOTO TO SPACE / 05',(55,48),15),('Bathroom and Recessed Wardrobe' if entry else ('Room Reconstruction · Top View' if 'top' in sys.argv else 'Room Reconstruction · Reverse View' if 'reverse' in sys.argv else 'Room Reconstruction · Current Layout'),(55,87),32),('Based on 10 photos and layout corrections · Exterior-wall cutaway only',(55,136),16),('Estimated dimensions  |  Interior partitions remain visible at every angle',(55,1030),15)]:d.text(xy,txt,font=preview_font(size),fill='#304741')
+out.save('outputs/bathroom-preview.png' if entry else 'outputs/top-preview.png' if 'top' in sys.argv else 'outputs/reverse-preview.png' if 'reverse' in sys.argv else 'outputs/room-preview.png')
 print('Depth-rendered preview complete')

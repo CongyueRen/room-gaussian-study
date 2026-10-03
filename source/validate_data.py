@@ -7,8 +7,8 @@ import numpy as np
 root = Path(__file__).resolve().parents[1]
 points = np.load(root / 'work/gaussians.npy')
 manifest = json.loads((root / 'outputs/gaussian-manifest.json').read_text())
-assert len(points) == manifest['count'] == 594640
-assert len(points) == 2 * manifest['previous_count']
+assert len(points) == manifest['count'] == 3000000
+assert len(points) == manifest['target_count']
 assert np.isfinite(points).all() and np.all(points[:, 9] > 0)
 raw = (root / 'outputs/room-gaussians.ply').read_bytes()
 header, payload = raw.split(b'end_header\n', 1)
@@ -23,3 +23,8 @@ scene = json.loads((root / 'work/scene.json').read_text())
 allowed = {'Left wall', 'Right wall', 'Entry left wall', 'Kitchen side wall', 'Bathroom far wall'}
 assert all(o['name'] in allowed for o in scene if o.get('autoCutaway'))
 print('PASS: density, finite data, Gaussian PLY, rotations, GLB and cutaway scope')
+
+bedding = [o for o in scene if o['name'] in {'Mattress', 'Neatly made blue duvet', 'Duvet fold', 'Rectangular blue pillow'}]
+curtain = next(o for o in scene if o['name'] == 'Blue curtain folds')
+assert len(bedding) == 5 and all(o['c'] == curtain['c'] for o in bedding)
+print('PASS: bedding matches curtain material; two rectangular pillows')

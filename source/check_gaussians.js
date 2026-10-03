@@ -7,4 +7,9 @@ const sandbox={document:{getElementById:id=>els[id]??=(id==='view'?{getContext:(
 vm.createContext(sandbox);vm.runInContext(code,sandbox);queued();assert(drawCount>0);assert(sandbox.window.modelReady);
 const validation=vm.runInContext(`(()=>{let interiorHidden=0;for(let i=0;i<16;i++){const a=i*Math.PI/8,b=[Math.sin(a)*.7,.714,Math.cos(a)*.7];const h=hiddenFor(b);for(let j=0;j<h.length;j++){if(h[j]&&!groups[j].autoCutaway&&!groups[j].wallOwner)interiorHidden++;}}if(interiorHidden)throw Error('Interior walls hidden');return {count:N,fields:data.length,interiorHidden};})()`,sandbox);
 els.bath.onclick();queued();els.home.onclick();queued();els.walls.onclick({target:els.walls});queued();els.size.oninput({target:{value:'0.75'}});queued();
+const full=drawCount,sorts=sandbox.window.viewerStats.sortPasses;
+els.count.oninput({target:{value:'50'}});queued();assert.equal(sandbox.window.viewerStats.selected,1500000);assert(drawCount<full);assert.equal(sandbox.window.viewerStats.sortPasses,sorts);
+const half=drawCount;els.count.oninput({target:{value:'5'}});queued();assert.equal(sandbox.window.viewerStats.selected,150000);assert(drawCount<half);
+els.count.oninput({target:{value:'100'}});queued();assert.equal(sandbox.window.viewerStats.selected,3000000);assert.equal(drawCount,full);
+vm.runInContext(`(()=>{const seen=new Uint8Array(N);for(let i=0;i<N;i++){if(rank[i]>=N||seen[rank[i]])throw Error('Invalid sampling rank');seen[rank[i]]=1;}for(let j=1;j<N;j++)if(bucket[ids[j]]<bucket[ids[j-1]])throw Error('Depth bucket order failed');})()`,sandbox);
 console.log(JSON.stringify({...validation,visibleDrawCount:drawCount,logic:'PASS',shaderCompilation:'NOT VERIFIED: mock WebGL context'},null,2));

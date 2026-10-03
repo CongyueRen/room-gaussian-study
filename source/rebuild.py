@@ -21,9 +21,12 @@ def main():
     (root / 'outputs/room-viewer.html').write_text(viewer)
     run('build_gaussians.py')
     run('validate_data.py')
+    run('check_layout.py')
     if args.previews:
         run('render_depth.py')
         run('render_depth.py', 'entry')
+        run('render_depth.py', 'top')
+        run('render_depth.py', 'reverse')
         run('render_gaussians.py')
     print('Complete: generated files are in outputs/')
 

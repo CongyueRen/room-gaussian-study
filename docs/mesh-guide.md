@@ -14,7 +14,7 @@ Open **room-viewer.html** in a WebGL-capable browser. It works offline without e
 - **Overview**, **Top view**, **Reverse**, and **Entry / Bath** select useful viewpoints.
 - **Outer walls: Auto** hides obstructing segments of the two long exterior sides only. Interior partitions, kitchen side partitions, bathroom doorway walls, wardrobe surround, entrance door and end walls remain visible.
 - **Outer walls: Show** and **Outer walls: Hide** affect only those same exterior segments. Interior walls remain unchanged in every mode.
-- Low wall footprints remain visible. Glass has a separate toggle. The ceiling is omitted for viewing from above.
+- Low wall footprints remain visible. Glass has a separate toggle. The main-room ceiling is omitted for viewing from above; the balcony roof and full-height side walls remain present.
 - Keep **room-clean.glb** beside the HTML file for the download button to work.
 
 ## Deliverables
@@ -23,7 +23,7 @@ Open **room-viewer.html** in a WebGL-capable browser. It works offline without e
 - `room-clean.glb`: complete geometry with named components, in metres, Y up.
 - `room-preview.png`: overall preview.
 - `bathroom-preview.png`: bathroom and entry detail.
-- `room-model-package.zip`: all current deliverables, plus editable source and checks.
+- `room-gaussian-study-v0.2.0.zip`: all current deliverables, plus editable source and checks.
 
 The GLB includes complete walls. Automatic visibility is a viewer feature; it does not transfer into other modelling applications. An English-content compatibility copy remains at the previous viewer path so an already-open tab can be refreshed.
 
@@ -39,4 +39,4 @@ The package's `source/` folder includes the geometry generator, viewer template,
 
 ## Gaussian surface prototype
 
-Open `gaussian-viewer.html` for the model-derived Gaussian version, or read `GAUSSIAN-README.md`. This is a surface conversion, not a photo-trained reconstruction.
+Open `gaussian-viewer.html` for the model-derived Gaussian version, or read [the Gaussian guide](gaussian-guide.md). This is a surface conversion, not a photo-trained reconstruction.

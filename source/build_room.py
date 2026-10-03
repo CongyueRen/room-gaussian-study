@@ -51,15 +51,27 @@ for y in [.12,2.31]:box('Door rail',2.66,y,0,.95,.065,.1,'white','window')
 box('Window sill',1.1,.79,.075,2.2,.055,.28,'white','window')
 box('Balcony floor',1.6,-.07,-.66,3.2,.12,1.2,'c9c8bd','balcony')
 box('Balcony parapet',1.6,.47,-1.2,3.2,.96,.07,'d1d5d0','balcony')
+for x in [-.065,3.265]:box('Balcony full-height side wall',x,1.28,-.63,.13,2.56,1.26,'wall','balcony')
+box('Balcony roof',1.60,2.625,-.63,3.46,.13,1.26,'wall','balcony')
 for x in [.17,3.02]:
  for i in range(8):ellipsoid('Blue curtain folds',x+(i-3.5)*.041,1.29,.16,.033,1.14,.047,'blue','curtains')
 # Bed head against left wall, long direction across room.
 box('Bed frame',1.05,.20,1.04,2.05,.34,1.48,'darkwood')
 box('Bed headboard',.055,.51,1.04,.10,.82,1.52,'darkwood')
-box('Mattress',1.09,.47,1.04,2,.22,1.43,'linen')
+box('Mattress',1.09,.47,1.04,2,.22,1.43,'blue')
 box('Neatly made blue duvet',1.32,.604,1.04,1.47,.075,1.44,'blue')
-for z in [.69,1.36]:ellipsoid('Pillow',.34,.635,z,.29,.1,.29,'cream')
-box('Duvet fold',.68,.645,1.04,.17,.065,1.44,'a5bdc6')
+# Rounded rectangular pillows: flat central faces with softened corners.
+for z in [.69,1.36]:
+ ellipsoid('Rectangular blue pillow',.34,.655,z,.25,.075,.29,'blue')
+ ob=objects[-1]
+ for k in range(0,len(ob['v']),3):
+  unit=[(ob['v'][k]-.34)/.25,(ob['v'][k+1]-.655)/.075,(ob['v'][k+2]-z)/.29]
+  shaped=[math.copysign(abs(t)**.32,t) for t in unit]
+  ob['v'][k:k+3]=[.34+shaped[0]*.25,.655+shaped[1]*.075,z+shaped[2]*.29]
+  normal=[math.copysign(abs(t)**5.25,t)/r for t,r in zip(shaped,[.25,.075,.29])]
+  length=math.sqrt(sum(t*t for t in normal))
+  ob['n'][k:k+3]=[t/length for t in normal]
+box('Duvet fold',.68,.645,1.04,.17,.065,1.44,'blue')
 # Desk along left wall.
 box('Desk top',.36,.765,2.96,.70,.055,1.24,'white')
 for x in [.08,.64]:
@@ -146,16 +158,16 @@ oak_floor('Wardrobe recessed footprint',1.06,1.42,5.30,6.04)
 box('Bathroom far wall',3.265,1.28,6.35,.13,2.56,2.10,'wall','wall')
 box('Bathroom end wall',2.20,1.28,7.46,2.12,2.56,.12,'wall','wall')
 box('Bathroom doorway front pier',1.42,1.28,5.70,.12,2.56,.68,'wall','partition')
-box('Bathroom doorway rear pier',1.12,1.28,6.90,.12,2.56,.12,'wall','partition')
-box('Bathroom doorway lintel',1.12,2.36,6.44,.12,.40,.80,'wall','partition')
-for z in [6.055,6.825]:box('Bathroom door jamb',1.12,1.06,z,.15,2.12,.035,'white','doorframe')
-box('Bathroom door head frame',1.12,2.12,6.44,.15,.045,.80,'white','doorframe')
+box('Bathroom doorway rear pier',1.18,1.28,6.87,.24,2.56,.18,'wall','partition')
+box('Bathroom doorway lintel',1.12,2.36,6.41,.12,.40,.74,'wall','partition')
+for z in [6.055,6.7625]:box('Bathroom door jamb',1.12,1.06,z,.15,2.12,.035,'white','doorframe')
+box('Bathroom door head frame',1.12,2.12,6.40875,.15,.045,.7425,'white','doorframe')
 box('Bathroom open door',1.54,1.05,6.085,.76,2.08,.035,'white','bathroom')
 box('Bathroom door handle',1.82,1.02,6.05,.11,.025,.035,'metal','bathroom')
 # Half-depth entrance niche: only 18 cm beyond the corridor wall plane.
 oak_floor('Recess floor',1.06,1.24,6.97,7.40)
 box('Recess return wall',1.18,1.28,6.97,.24,2.56,.06,'wall','partition')
-box('Recess back wall',1.30,1.28,7.22,.12,2.56,.44,'wall','partition')
+box('Recess back wall',1.30,1.28,7.09,.12,2.56,.62,'wall','partition')
 box('Recess cabinet',1.17,.45,7.21,.12,.9,.32,'white','entry')
 for y in [.23,.66]:box('Recess drawer front',1.103,y,7.21,.014,.40,.29,'white','entry')
 for x,w in [(.045,.09),(1.11,.39)]:box('Entrance side pier',x,1.28,7.46,w,2.56,.12,'wall','wall')
@@ -176,14 +188,6 @@ box('Basin tap spout',2.19,1.075,5.50,.03,.025,.16,'metal','bathroom')
 box('Bathroom mirror cabinet',1.87,1.62,5.47,1.26,.76,.20,'white','bathroom')
 box('Bathroom mirror surface',1.87,1.62,5.578,1.15,.64,.012,'9dacac','bathroom')
 box('Bathroom mirror shelf',1.87,1.22,5.57,1.33,.045,.32,'white','bathroom')
-box('Bathtub base',2.84,.18,6.31,.62,.22,1.84,'white','bathroom')
-for x in [2.56,3.12]:box('Bathtub side rim',x,.36,6.31,.07,.36,1.84,'white','bathroom')
-for z in [5.43,7.19]:box('Bathtub end rim',2.84,.36,z,.62,.36,.075,'white','bathroom')
-box('Bathtub interior',2.84,.296,6.31,.44,.016,1.67,'dce1da','bathroom')
-box('Shower rail',3.17,1.55,5.72,.025,1.13,.03,'metal','bathroom')
-ellipsoid('Shower head',3.09,2.04,5.72,.09,.045,.085,'metal','bathroom')
-box('Shower curtain rod',2.54,2.20,6.31,.022,.022,1.84,'metal','bathroom')
-for i in range(7):ellipsoid('Gathered shower curtain',2.54,1.38,7.02+i*.026,.028,.79,.02,'cream','bathroom')
 # Clockwise quarter-turn in plan, placing toilet nearest the kitchen.
 for ob in objects[bathroom_fixture_start:]:
  for key in ['v','n']:
@@ -191,9 +195,20 @@ for ob in objects[bathroom_fixture_start:]:
    x,z=ob[key][j],ob[key][j+2]
    ob[key][j]=3.20-(z-5.36) if key=='v' else -z
    ob[key][j+2]=5.36+(x-1.18) if key=='v' else x
+# Tub is flush with the end wall and short return wall beside the door.
+# Its 0.62 m short edge matches the return wall from z=6.78 to 7.40.
+box('Bathtub base',2.28,.18,7.09,1.84,.22,.62,'white','bathroom')
+for z in [6.815,7.365]:box('Bathtub side rim',2.28,.36,z,1.84,.36,.07,'white','bathroom')
+for x in [1.395,3.165]:box('Bathtub end rim',x,.36,7.09,.07,.36,.48,'white','bathroom')
+box('Bathtub interior',2.28,.296,7.09,1.70,.016,.48,'dce1da','bathroom')
+box('Shower rail',1.397,1.55,7.09,.025,1.13,.03,'metal','bathroom')
+ellipsoid('Shower head',1.48,2.04,7.09,.085,.045,.09,'metal','bathroom')
+box('Shower curtain rod',2.28,2.20,6.78,1.84,.022,.022,'metal','bathroom')
+for i in range(7):ellipsoid('Gathered shower curtain',2.96+i*.026,1.38,6.78,.02,.79,.028,'cream','bathroom')
+# Tile only the two adjoining walls of the tub, never the toilet side.
 for iy in range(7):
- for iz in range(10):box('Bathroom far wall tile',3.187,.15+iy*.23,5.47+iz*.20,.018,.225,.195,'e4e3d9','bathTileFar')
- for ix in range(10):box('Bathroom shared wall tile',1.30+ix*.19,.15+iy*.23,5.372,.185,.225,.018,'e4e3d9','bathTileTub')
+ for ix in range(9):box('Bathtub long wall tile',1.36+(ix+.5)*1.84/9,.15+iy*.23,7.387,1.84/9-.004,.225,.018,'e4e3d9','bathTileLong')
+ for iz in range(3):box('Bathtub short wall tile',1.373,.15+iy*.23,6.78+(iz+.5)*.62/3,.018,.225,.62/3-.004,'e4e3d9','bathTileShort')
 box('Shoe cabinet',.18,.40,5.05,.34,.8,.77,'wood','entry')
 for y in [.21,.58]:box('Shoe drawer',.36,y,5.05,.02,.32,.71,'white','entry')
 box('Mirror backing',.03,.97,4.26,.06,1.81,.49,'white','entry')
@@ -207,8 +222,8 @@ for name,o in list(wall_names.items()):
  v=o['v'];lo=[min(v[k::3]) for k in range(3)];hi=[max(v[k::3]) for k in range(3)];o['bounds']=[lo,hi];o['autoCutaway']=name in ['Left wall','Right wall','Entry left wall','Kitchen side wall','Bathroom far wall']
  if lo[1]<.15 and hi[1]>.3:box(name+' footprint',(lo[0]+hi[0])/2,.065,(lo[2]+hi[2])/2,hi[0]-lo[0],.13,hi[2]-lo[2],'wall','wallbase')
 for o in objects:
- if o['group']=='bathTileFar':o['wallOwner']='Bathroom far wall'
- if o['group']=='bathTileTub':o['wallOwner']='Kitchen bathroom shared thin wall'
+ if o['group']=='bathTileLong':o['wallOwner']='Bathroom end wall'
+ if o['group']=='bathTileShort':o['wallOwner']='Recess back wall'
  if o['name']=='Grey backsplash tile':o['wallOwner']='Kitchen bathroom shared thin wall'
  if o['group']=='entrydoor':o['bounds']=[[.075,0,7.39],[.965,2.15,7.47]]
 # Export genuine geometry as a self-contained GLB, metres, Y up.

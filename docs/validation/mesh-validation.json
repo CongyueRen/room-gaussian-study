@@ -1,0 +1,46 @@
+{
+  "viewerLogic": "PASS",
+  "wallAngles": [
+    {
+      "angle": 0,
+      "hidden": 0,
+      "retained": 23
+    },
+    {
+      "angle": 45,
+      "hidden": 3,
+      "retained": 20
+    },
+    {
+      "angle": 90,
+      "hidden": 3,
+      "retained": 20
+    },
+    {
+      "angle": 135,
+      "hidden": 3,
+      "retained": 20
+    },
+    {
+      "angle": 180,
+      "hidden": 0,
+      "retained": 23
+    },
+    {
+      "angle": 225,
+      "hidden": 2,
+      "retained": 21
+    },
+    {
+      "angle": 270,
+      "hidden": 2,
+      "retained": 21
+    },
+    {
+      "angle": 315,
+      "hidden": 2,
+      "retained": 21
+    }
+  ],
+  "sceneObjects": 669
+}

@@ -33,5 +33,5 @@ def preview_font(size):
   try:return ImageFont.truetype(name,size)
   except OSError:pass
  return ImageFont.load_default(size=size)
-for text,pos,size in [('GAUSSIAN SURFACE STUDY / 02 · HIGH DENSITY',(40,35),14),('Room · Gaussian Splat Preview',(40,70),29),('Model-derived anisotropic Gaussians · Not photo-trained',(40,115),15),(f'{len(a):,} Gaussians | Original furniture and corrected layout',(40,1005),14)]:d.text(pos,text,font=preview_font(size),fill='#304741')
+for text,pos,size in [('GAUSSIAN SURFACE STUDY / 04 · MUTED BLUE / 3M SPLATS',(40,35),14),('Room · Gaussian Splat Preview',(40,70),29),('Model-derived anisotropic Gaussians · Not photo-trained',(40,115),15),(f'{len(a):,} Gaussians | Original furniture and corrected layout',(40,1005),14)]:d.text(pos,text,font=preview_font(size),fill='#304741')
 out.save('outputs/gaussian-preview.png');print('Gaussian preview rendered')

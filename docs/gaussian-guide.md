@@ -1,34 +1,15 @@
-# Room Gaussian Splat Prototype
+# Gaussian viewer guide
 
-This prototype converts the corrected, decluttered room model into **anisotropic 3D Gaussian primitives**. It is a surface-sampled conversion, not a model trained from the uploaded photographs. Its colors and detail come from the existing room geometry; conversion cannot recover missing photographic texture, reflections or lighting.
+This model-derived prototype samples the corrected room geometry into exactly **3,000,000 anisotropic Gaussians**. It is not trained from photographs.
 
-## Density revision
+Use the [live demo](https://congyueren.github.io/room-gaussian-study/) or open `gaussian-viewer.html` from the offline release. Drag to orbit; scroll or pinch to zoom. Overview, Top view, Entry / Bath and Reverse provide camera presets. Switch to Mesh view to compare geometry.
 
-This version uses 594,640 Gaussians, exactly twice the previous 297,320. Each triangle receives twice as many fresh surface samples; points are not duplicated. Tangential Gaussian scales shrink by a factor of sqrt(2), preserving approximate coverage while improving sampling detail. The PLY and offline viewer both contain the denser data.
+**Gaussian count** selects 5–100% of the model (150,000–3,000,000 points). **Splat size** independently changes footprints. Selected count differs from drawn count because wall and backface filtering remove hidden samples. Downloads always include the full dataset. The Gaussian page is approximately 192 MB before compression and decoding; the mesh-first homepage avoids loading it until requested.
 
-## Open the viewer
+Only the two long exterior wall sides respond to Auto / Show / Hide. Interior partitions, the doorway, bathroom tiled walls, balcony side walls and balcony roof remain fixed.
 
-Open `gaussian-viewer.html` in a WebGL-capable browser. It works offline and needs no installation. Drag to orbit, scroll or pinch to zoom. Use **Splat size** to adjust the Gaussian footprint. Smaller values reveal the individual splats; larger values make surfaces appear more continuous.
+The viewer projects anisotropic covariance into screen space, sorts centres into depth buckets and alpha blends Gaussian footprints, with an orthographic camera and surface-normal culling. These approximations can cause soft edges and transparency artifacts. Increasing density does not produce missing photographic detail.
 
-Only the two long exterior sides respond to **Outer walls** controls. All interior partitions and doorways remain fixed. The mesh viewer is preserved at `room-viewer.html`.
+The binary PLY uses metres, Y up, DC spherical harmonics, log scales, logit opacity and normalized wxyz rotations. The custom viewer's wall metadata is not carried by standard PLY interchange. Third-party imports have not been verified.
 
-The viewer projects each Gaussian's anisotropic covariance onto the screen, sorts primitives by centre depth, and alpha-blends their Gaussian footprints. It uses an orthographic camera and surface-normal culling for this model-derived scene. This lightweight viewer is not a full photo-training engine. Some grain, soft edges and transparency artifacts are expected, especially at grazing angles.
-
-## Files
-
-- `room-gaussians.ply`: binary Gaussian PLY with positions, DC spherical-harmonic colors, logit opacity, logarithmic scales and normalized wxyz rotations. This is not an ordinary point-cloud PLY.
-- `gaussian-viewer.html`: standalone viewer with embedded Gaussian data and wall-group metadata.
-- `gaussian-preview.png`: independent Gaussian-rendered preview of the same dataset.
-- `gaussian-manifest.json`: data provenance and primitive count.
-
-The PLY uses metres and Y up. It contains complete walls. Wall grouping and automatic cutaway are implemented in the supplied HTML and are not preserved by the standard PLY interchange format.
-
-## Optional tools
-
-No additional skill, resource pack or software is required for this prototype. For editing, [SuperSplat](https://github.com/playcanvas/supersplat) runs in the browser and supports [Gaussian PLY import](https://github.com/playcanvas/developer-site/blob/main/docs/user-manual/supersplat/editor/import-export.md). Compatibility is based on its documented format; an actual SuperSplat import has not been tested here.
-
-A later photorealistic reconstruction would need a suitable overlapping photo/video capture and camera registration before training. [OpenSplat](https://github.com/WebODM/OpenSplat) supports Apple Metal and registered camera/point inputs; this prototype does not require installing or running it. No photos or models have been published or uploaded to an external service.
-
-## Validation and limits
-
-Numeric fields, file size, quaternion normalization, Gaussian scales, viewer script execution and exterior-only visibility are checked locally. The preview is independently rendered from the Gaussian dataset. Browser rendering cannot be verified in this environment because local-file URL access is blocked. The supplied interactive viewer should therefore be treated as an unverified browser build until opened on the user's device.
+Validation covers finite data, counts, rotation norms, file structure, layout connections and mock-WebGL controls. Real-device rendering/performance is a separate check, not established by those tests. Full photo-trained reconstruction would require suitable overlapping captures and registered cameras; no such training is performed here.
