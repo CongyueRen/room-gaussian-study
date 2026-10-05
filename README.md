@@ -18,13 +18,13 @@ The creator describes the original workflow as **Codex 5.6**; this repository do
 
 ## Explore every angle
 
-The following are independent renders of the model, not browser screenshots. The live viewers provide the actual controls described below.
+The following screenshots show the live Mesh viewer and its controls. The leading Gaussian image is an independent render of the same model.
 
 | Overview · Mesh | Entry / Bath |
 |:--:|:--:|
-| ![Mesh overview](docs/images/room-preview.png) | ![Bathroom and wardrobe](docs/images/bathroom-preview.png) |
+| ![Mesh overview](docs/images/live-mesh-overview.png) | ![Bathroom and wardrobe](docs/images/bathroom-preview.png) |
 | Top view | Reverse view |
-| ![Top view](docs/images/top-preview.png) | ![Reverse view](docs/images/reverse-preview.png) |
+| ![Top view](docs/images/live-top.png) | ![Reverse view](docs/images/live-reverse.png) |
 
 ### Interactive controls
 
@@ -45,7 +45,7 @@ The following are independent renders of the model, not browser screenshots. The
 | Mesh view / Gaussian view | Move between the individual viewer pages |
 | Download GLB / PLY | Export the mesh or the full three-million-point Gaussian dataset |
 
-The landing page loads Mesh first. The self-contained Gaussian viewer is about **192 MB** before compression and decoding; its first load may take time. On slower devices, reduce Gaussian count. The slider controls a uniform subset of the complete model; it does not remove one region of the room, and PLY downloads always contain all points.
+The landing page loads Mesh first. The online Gaussian viewer loads a compressed dataset of about **37 MB**, with visible download progress. The offline self-contained HTML is about **192 MB**. On slower devices, reduce Gaussian count. The slider controls a uniform subset of the complete model; it does not remove one region of the room, and PLY downloads always contain all points.
 
 The Mesh viewer also lists the included spaces (bedroom, desk, storage, kitchenette, entry and bathroom) and estimated dimensions: main room **3.2 × 4.5 m**, ceiling **2.56 m**, bed **2.0 × 1.4 m**. The balcony sides reach the same ceiling height.
 
@@ -91,7 +91,7 @@ Outputs include `room-clean.glb`, `room-gaussians.ply`, both standalone viewers 
 
 Numeric checks cover exactly three million finite samples, normalized rotations, PLY fields, GLB structure, curtain/bedding color agreement, tub/wall/door connections and balcony height. Mock-WebGL checks cover viewpoint controls, count selection, sorting and exterior-only cutaways. Independent renders are visually inspected.
 
-These checks do not establish real-browser GPU performance, shader execution, or compatibility with third-party PLY editors. Dimensions are estimates, not construction measurements. Surface-normal culling, approximate depth sorting and alpha blending can produce soft edges or transparency artifacts. See [the Gaussian guide](docs/gaussian-guide.md) and [progress notes](docs/PROGRESS.md).
+The public Mesh viewer and its camera presets have also been visually checked in a browser, and the full 3M Gaussian model has rendered successfully. Cross-device performance and third-party PLY compatibility have not been established. Dimensions are estimates, not construction measurements. Surface-normal culling, approximate depth sorting and alpha blending can produce soft edges or transparency artifacts. See [the Gaussian guide](docs/gaussian-guide.md) and [progress notes](docs/PROGRESS.md).
 
 ## Open source
 

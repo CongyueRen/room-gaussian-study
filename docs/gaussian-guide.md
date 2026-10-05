@@ -4,7 +4,7 @@ This model-derived prototype samples the corrected room geometry into exactly **
 
 Use the [live demo](https://congyueren.github.io/room-gaussian-study/) or open `gaussian-viewer.html` from the offline release. Drag to orbit; scroll or pinch to zoom. Overview, Top view, Entry / Bath and Reverse provide camera presets. Switch to Mesh view to compare geometry.
 
-**Gaussian count** selects 5–100% of the model (150,000–3,000,000 points). **Splat size** independently changes footprints. Selected count differs from drawn count because wall and backface filtering remove hidden samples. Downloads always include the full dataset. The Gaussian page is approximately 192 MB before compression and decoding; the mesh-first homepage avoids loading it until requested.
+**Gaussian count** selects 5–100% of the model (150,000–3,000,000 points). **Splat size** independently changes footprints. Selected count differs from drawn count because wall and backface filtering remove hidden samples. Downloads always include the full dataset. The online Gaussian page loads approximately 37 MB of compressed data; the offline HTML is approximately 192 MB; the mesh-first homepage avoids loading it until requested.
 
 Only the two long exterior wall sides respond to Auto / Show / Hide. Interior partitions, the doorway, bathroom tiled walls, balcony side walls and balcony roof remain fixed.
 
